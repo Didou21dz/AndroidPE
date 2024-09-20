@@ -60,7 +60,6 @@ public class CommonAttrSetter {
                     AD.parseValues(
                             dialog.element,
                             "android:tint",
-                            dialog.binding.tieTint.getText().toString(),
                             "@color",
                             AttrViewDataAdapter.getListAssist("@color"));
                     AD.setOnSaveListener(
@@ -82,7 +81,6 @@ public class CommonAttrSetter {
                     AD.parseValues(
                             dialog.element,
                             "android:background",
-                            dialog.binding.tieBackground.getText().toString(),
                             "@(color|drawable)",
                             AttrViewDataAdapter.getListAssist("@(color|drawable)"));
                     AD.setOnSaveListener(
@@ -104,7 +102,6 @@ public class CommonAttrSetter {
                     AD.parseValues(
                             dialog.element,
                             "android:backgroundTint",
-                            dialog.binding.tieBackgroundTint.getText().toString(),
                             "@color",
                             AttrViewDataAdapter.getListAssist("@color"));
                     AD.setOnSaveListener(
@@ -123,9 +120,8 @@ public class CommonAttrSetter {
         // Visibility
         dialog.binding.toggleBtnVisibility.addOnButtonCheckedListener(
                 (mbt, idBtn, checked) -> {
-                    if (!checked) {
-                        dialog.element.removeAttribute("android:visibility");
-                    } else {
+                    if (!checked) dialog.element.removeAttribute("android:visibility");
+                    else {
                         if (idBtn == dialog.binding.btnVisible.getId()) {
                             dialog.element.setAttribute("android:visibility", "visible");
                         } else if (idBtn == dialog.binding.btnInvisible.getId()) {
@@ -136,7 +132,7 @@ public class CommonAttrSetter {
                     }
                     dialog.setValueChanged();
                 });
-
+        
         // alpha
         dialog.binding.cbAlpha.setOnCheckedChangeListener(
                 (c, b) -> {

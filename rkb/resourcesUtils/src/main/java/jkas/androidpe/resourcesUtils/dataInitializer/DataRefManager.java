@@ -25,6 +25,10 @@ public class DataRefManager {
         return INSTANCE;
     }
 
+    public void reload() {
+        initData();
+    }
+
     public void setCurrentModuleRes(String currentFilePath) {
         for (ModuleProject mp : listModuleProject)
             if (currentFilePath.startsWith(mp.getAbsolutePath()))

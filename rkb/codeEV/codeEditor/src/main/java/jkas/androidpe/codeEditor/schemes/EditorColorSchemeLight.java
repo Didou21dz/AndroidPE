@@ -21,7 +21,7 @@ public class EditorColorSchemeLight extends EditorColorScheme {
         setColor(OPERATOR, 0xff3a0000);
         setColor(COMMENT, 0xff3f7f5f);
         setColor(KEYWORD, 0xff7f0074);
-        setColor(WHOLE_BACKGROUND, 0xffffffff);
+        setColor(WHOLE_BACKGROUND, 0xfffffdf5);
         setColor(TEXT_NORMAL, 0xff000000);
         setColor(LINE_NUMBER_BACKGROUND, 0xffffffff);
         setColor(LINE_NUMBER, 0xff787878);

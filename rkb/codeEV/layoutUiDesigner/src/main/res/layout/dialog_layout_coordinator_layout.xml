@@ -1,186 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout
-	xmlns:android="http://schemas.android.com/apkLires/android"
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_height="wrap_content"
 	android:layout_width="match_parent"
 	android:orientation="vertical">
 
 	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent">
 
 		<LinearLayout
-			android:layout_height="match_parent"
+			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:orientation="vertical">
 
 			<TextView
+				android:layout_height="wrap_content"
 				android:layout_width="match_parent"
+				android:alpha="0.76"
+				android:padding="8dp"
+				android:textSize="10dp"
+				android:textColor="?colorTertiary"
+				android:text="@string/info_coordinator_layout_attr_test"
+				android:layout_margin="8dp"/>
+
+			<com.google.android.material.divider.MaterialDivider
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:padding="8dp"
-				android:text="..."/>
+				android:layout_margin="8dp"/>
 
 			<com.google.android.material.textfield.TextInputLayout
-				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="8dp"
+				android:layout_width="match_parent"
+				android:hint="app:layout_behavior"
+				android:padding="14dp"
 				android:layout_margin="8dp"
-				android:hint="app:layout_behavior">
+				android:id="@+id/til_layout_behavior">
 
-				<com.google.android.material.textfield.TextInputEditText
-					android:layout_width="match_parent"
+				<AutoCompleteTextView
 					android:layout_height="wrap_content"
-					android:padding="8dp"
-					android:text="..."/>
+					android:layout_width="match_parent"
+					android:padding="14dp"
+					android:textSize="12dp"
+					android:text="..."
+					android:id="@+id/autoCompLayoutBehavior"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
 
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:padding="8dp"
-				android:layout_marginBottom="26dp"
-				android:id="@+id/tvInfo"
-				android:typeface="monospace"
-				android:textSize="10dp"
-				android:gravity="center"
-				android:text=". . ."/>
-
 			<ir.programmerplus.groupbox.GroupBoxLayout
-				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
 				app:labelTextColor="?colorOnSurface"
 				android:padding="4dp"
+				android:layout_margin="8dp"
 				app:labelTextSize="10dp"
 				app:borderColor="?colorOnSurface"
 				app:borderCornerRadius="8dp"
 				app:borderStrokeWidth="0.7dp"
 				android:layoutDirection="ltr"
 				app:labelText="Attr from BottomSheetBehavoir"
-				android:layout_margin="8dp">
+				android:id="@+id/groupBoxLayout">
 
 				<LinearLayout
-					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_width="match_parent"
 					android:orientation="vertical"
-					android:paddingBottom="16dp">
-
-					<com.google.android.material.textfield.TextInputLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="8dp"
-						android:hint="app:attr"
-						android:layout_marginLeft="8dp"
-						android:layout_marginRight="8dp"
-						android:layout_marginTop="8dp">
-
-						<com.google.android.material.textfield.TextInputEditText
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:padding="8dp"
-							android:text="..."/>
-
-					</com.google.android.material.textfield.TextInputLayout>
-
-					<com.google.android.material.textfield.TextInputLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="8dp"
-						android:hint="app:attr"
-						android:layout_marginLeft="8dp"
-						android:layout_marginRight="8dp"
-						android:layout_marginTop="8dp">
-
-						<com.google.android.material.textfield.TextInputEditText
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:padding="8dp"
-							android:text="..."/>
-
-					</com.google.android.material.textfield.TextInputLayout>
-
-					<com.google.android.material.textfield.TextInputLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="8dp"
-						android:hint="app:attr"
-						android:layout_marginLeft="8dp"
-						android:layout_marginRight="8dp"
-						android:layout_marginTop="8dp">
-
-						<com.google.android.material.textfield.TextInputEditText
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:padding="8dp"
-							android:text="..."/>
-
-					</com.google.android.material.textfield.TextInputLayout>
-
-					<com.google.android.material.textfield.TextInputLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="8dp"
-						android:hint="app:attr"
-						android:layout_marginLeft="8dp"
-						android:layout_marginRight="8dp"
-						android:layout_marginTop="8dp">
-
-						<com.google.android.material.textfield.TextInputEditText
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:padding="8dp"
-							android:text="..."/>
-
-					</com.google.android.material.textfield.TextInputLayout>
-
-					<com.google.android.material.textfield.TextInputLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="8dp"
-						android:hint="app:attr"
-						android:layout_marginLeft="8dp"
-						android:layout_marginRight="8dp"
-						android:layout_marginTop="8dp">
-
-						<com.google.android.material.textfield.TextInputEditText
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:padding="8dp"
-							android:text="..."/>
-
-					</com.google.android.material.textfield.TextInputLayout>
-
-					<com.google.android.material.textfield.TextInputLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="8dp"
-						android:hint="app:attr"
-						android:layout_marginLeft="8dp"
-						android:layout_marginRight="8dp"
-						android:layout_marginTop="8dp">
-
-						<com.google.android.material.textfield.TextInputEditText
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:padding="8dp"
-							android:text="..."/>
-
-					</com.google.android.material.textfield.TextInputLayout>
-
-				</LinearLayout>
+					android:id="@+id/linAttrBottomSheetBehavior"
+					android:paddingBottom="16dp"/>
 
 			</ir.programmerplus.groupbox.GroupBoxLayout>
 
 			<CheckBox
-				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
 				android:padding="8dp"
-				android:id="@+id/checkBoxAutoDeleteAttr"
-				android:checked="true"
-				android:text="@string/delete_attr_if_empty"
 				android:layout_margin="8dp"
-				android:enabled="false"/>
+				android:enabled="false"
+				android:checked="true"
+				android:id="@+id/checkBoxAutoDeleteAttr"
+				android:text="@string/delete_attr_if_empty"/>
 
 		</LinearLayout>
 

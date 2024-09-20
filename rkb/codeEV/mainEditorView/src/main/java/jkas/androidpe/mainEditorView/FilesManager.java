@@ -64,6 +64,7 @@ public class FilesManager {
             restoreContent();
         }
         loading = false;
+        LoggerRes.addLogListener(() -> currentOpenedFile.reload());
     }
 
     private MainEditorView addMainEV(String path) {
@@ -72,20 +73,6 @@ public class FilesManager {
         mainEV.setOnAnyChangedListener(cause -> updateOnEventListener(cause));
         tmpListOpenedFiles.add(new Pair<>(path, mainEV));
         return mainEV;
-    }
-
-    private void updateView() {
-        LoggerRes.addLogListener(
-                new LoggerRes.LogListener() {
-                    @Override
-                    public void updateView() {
-                        setCurrentOpenFile();
-                        DataRefManager.getInstance()
-                                .setCurrentModuleRes(currentOpenedFile.getPath());
-                        currentOpenedFile.flipToAnotherView();
-                        currentOpenedFile.flipToAnotherView();
-                    }
-                });
     }
 
     private void setCurrentOpenFile() {
@@ -247,7 +234,6 @@ public class FilesManager {
 
     public synchronized void save() {
         boolean resModified = false;
-
         for (var pair : tmpListOpenedFiles) {
             if (ValuesTools.PathController.isValuesFile(pair.first)) {
                 if (pair.second.isThereUnsavedContent()) {
@@ -256,17 +242,11 @@ public class FilesManager {
                 }
             } else pair.second.save();
         }
-
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             tab.setText(tab.getText().toString().replace("*", ""));
         }
-
-        if (resModified) {
-            LoggerRes.reloadResRef();
-            updateView();
-        }
-
+        if (resModified) LoggerRes.reloadResRef();
         listenerRequest.onSavedEnabled(false);
     }
 

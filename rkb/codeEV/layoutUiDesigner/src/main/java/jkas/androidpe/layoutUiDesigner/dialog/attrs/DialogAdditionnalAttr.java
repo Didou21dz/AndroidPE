@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 import jkas.androidpe.resourcesUtils.adapters.CustomAutoCompleteAdapter;
 import jkas.androidpe.layoutUiDesigner.databinding.DialogAdditionnalAttrBinding;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
+import jkas.androidpe.resourcesUtils.utils.ViewUtils;
 import jkas.androidpe.resources.R;
 import jkas.androidpe.resourcesUtils.adapters.AttrViewAdapter;
 import jkas.androidpe.resourcesUtils.adapters.AttrViewDataAdapter;
@@ -265,7 +265,6 @@ public class DialogAdditionnalAttr {
     private void loadDefaultData() {
         loadCommon();
         listAdditionnal.clear();
-
         Map<String, String[]> listAttr = getList();
         if (listAttr == null) {
             binding.btnAdditional.setEnabled(false);
@@ -288,11 +287,9 @@ public class DialogAdditionnalAttr {
             else attrUsed.add(attr);
         }
         binding.toggleType.check(binding.btnAdditional.getId());
-
         ArrayList<String> list = new ArrayList<>();
         list.addAll(listAdditionnal);
         list.addAll(listCommon);
-
         Collections.sort(list);
         CustomAutoCompleteAdapter adapter =
                 new CustomAutoCompleteAdapter(C, android.R.layout.simple_dropdown_item_1line, list);

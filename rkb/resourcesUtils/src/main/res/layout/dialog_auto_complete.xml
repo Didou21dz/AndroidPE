@@ -41,12 +41,12 @@
                 app:endIconMode="clear_text"
                 android:id="@+id/til">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:textSize="12sp"
                     android:padding="16dp"
-                    android:id="@+id/textInput" />
+                    android:id="@+id/autoComp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

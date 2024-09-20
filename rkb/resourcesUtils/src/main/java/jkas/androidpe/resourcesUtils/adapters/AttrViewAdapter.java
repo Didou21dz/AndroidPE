@@ -35,7 +35,7 @@ public class AttrViewAdapter {
     private ArrayList<String> listAdapterAssist = new ArrayList<>();
     private String attrName;
     private String valueType;
-    private boolean autoSave = false, autoSaveForEdit = false, focus = false;
+    private boolean focus = false, autoRemove = false;
 
     public AttrViewAdapter(Context C, Element e, String attrName, String[] list) {
         this.C = C;
@@ -45,30 +45,36 @@ public class AttrViewAdapter {
 
         init();
         adapter();
-    }
-
-    public void setAutoSave(boolean autoSave) {
         loadDefault();
         events();
+    }
 
-        this.autoSave = autoSave;
-        this.autoSaveForEdit = autoSave;
+    public void setDeleteBtnVisible(boolean visible) {
+        if (visible) binding.icDelete.setVisibility(View.VISIBLE);
+        else binding.icDelete.setVisibility(View.GONE);
+    }
 
-        if (autoSave) return;
-        binding.icDelete.setVisibility(View.GONE);
-        binding.multiAutoCompTV.setText("");
+    public void setText(String txt) {
+        binding.multiAutoCompTV.setText(txt);
+    }
+
+    public void setAutoRemoveAttrIfEmpty(boolean autoRemove) {
+        this.autoRemove = autoRemove;
+    }
+
+    public String getAttr() {
+        return attrName;
+    }
+
+    public String getText() {
+        return binding.multiAutoCompTV.getText().toString();
     }
 
     private void events() {
         binding.viewFlipper.setOnClickListener(
                 v -> {
                     DialogAttrValueParserAssist dialog = new DialogAttrValueParserAssist(C);
-                    dialog.parseValues(
-                            element,
-                            attrName,
-                            binding.multiAutoCompTV.getText().toString(),
-                            valueType,
-                            listAdapterAssist);
+                    dialog.parseValues(element, attrName, valueType, listAdapterAssist);
                     dialog.setOnSaveListener(
                             finalValue -> binding.multiAutoCompTV.setText(finalValue));
                     dialog.show();
@@ -97,19 +103,19 @@ public class AttrViewAdapter {
 
                     @Override
                     public void afterTextChanged(Editable editable) {
+                        binding.TIL.setError(null);
                         if (editable.toString().trim().length() == 0) {
+                            if (autoRemove) {
+                                element.removeAttribute(attrName.intern());
+                                deleteAttr();
+                                return;
+                            }
                             if (focus)
                                 new Handler(Looper.getMainLooper())
                                         .postDelayed(
                                                 () -> binding.multiAutoCompTV.showDropDown(), 50);
                         }
-                        if (autoSave) autoCompTextChanged(editable.toString());
-                        else {
-                            if (editable.toString().length() == 0) autoSaveForEdit = false;
-                            else autoSaveForEdit = true;
-                            if (autoSaveForEdit) autoCompTextChanged(editable.toString());
-                            else element.removeAttribute(attrName.intern());
-                        }
+                        autoCompTextChanged(editable.toString());
                     }
                 });
 
@@ -147,14 +153,14 @@ public class AttrViewAdapter {
 
     private void deleteAttr() {
         element.removeAttribute(attrName);
-        listener.onChanged();
-        listener.onDeleted();
+        if (listener != null) listener.onChanged();
+        if (listener != null) listener.onDeleted();
     }
 
     private void autoCompTextChanged(String txt) {
         binding.tvAssist.setBackground(null);
         element.setAttribute(attrName, txt);
-        listener.onChanged();
+        if (listener != null) listener.onChanged();
         if (valueType != null) {
             if (txt.startsWith("@drawable/")
                     || txt.startsWith("@android:drawable/")
@@ -183,6 +189,7 @@ public class AttrViewAdapter {
 
     private void init() {
         binding = LayoutAttrViewAdapterBinding.inflate(LayoutInflater.from(C));
+        if (listValuesAssist != null && listValuesAssist.length == 0) listValuesAssist = null;
     }
 
     public View getView() {
@@ -200,7 +207,7 @@ public class AttrViewAdapter {
     }
 
     public interface OnAttrChangedListener {
-        public void onDeleted();
+        public default void onDeleted() {}
 
         public void onChanged();
     }

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import jkas.androidpe.layoutUiDesigner.databinding.LayoutListItemBinding;
 import jkas.androidpe.layoutUiDesigner.tools.ViewCreator;
 import jkas.androidpe.layoutUiDesigner.utils.DragAndDropUtils;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
+import jkas.androidpe.layoutUiDesigner.utils.Utils;
+import jkas.androidpe.resourcesUtils.utils.ViewUtils;
 import jkas.codeUtil.Files;
 
 /**
@@ -48,16 +49,16 @@ public class ViewPalettesAdapter extends ArrayAdapter<ViewPalettesAdapter.DataIt
     private void event(final View view, DataItem item) {
         view.setOnLongClickListener(
                 v -> {
-                    if (!ViewUtils.CurrentSettings.isDrawStrokeEnabled) return true;
-                    ViewUtils.CurrentSettings.addByDrag = true;
-                    DragAndDropUtils.startDragAndDrop(
-                            v,
-                            new ClipData(
-                                    item.name,
-                                    new String[] {"text/plain"},
-                                    new ClipData.Item(item.name)),
-                            ViewCreator.create("null", C, item.name, false));
-                    listener.onDragAccepted();
+                    if (!Utils.CurrentSettings.isDrawStrokeEnabled) return true;
+                    Utils.CurrentSettings.addByDrag = true;
+                    if (listener.onDragAccepted())
+                        DragAndDropUtils.startDragAndDrop(
+                                v,
+                                new ClipData(
+                                        item.name,
+                                        new String[] {"text/plain"},
+                                        new ClipData.Item(item.name)),
+                                ViewCreator.create("null", C, item.name, false));
                     return true;
                 });
 

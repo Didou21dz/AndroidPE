@@ -17,10 +17,10 @@ public class AttrRangeSlider {
 
     private static void init() {
         attrs.put("app:minSeparation", null);
-        attrs.put("app:stepSize", null);
-        attrs.put("app:values", null);
-        attrs.put("app:valueFrom", null);
-        attrs.put("app:valueTo", null);
+        attrs.put("android:stepSize", null);
+        attrs.put("android:values", null);
+        attrs.put("android:valueFrom", null);
+        attrs.put("android:valueTo", null);
         attrs.put("app:haloRadius", null);
         attrs.put("app:haloColor", new String[] {"@string"});
         attrs.put("app:labelBehavior", null);

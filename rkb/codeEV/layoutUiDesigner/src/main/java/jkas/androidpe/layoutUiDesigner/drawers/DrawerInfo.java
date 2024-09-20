@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.LayoutInflater;
 import jkas.androidpe.layoutUiDesigner.databinding.LayoutInfoBinding;
 import jkas.androidpe.layoutUiDesigner.databinding.LayoutInfoItemBinding;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
 import jkas.androidpe.logger.LogMsg;
 import jkas.androidpe.logger.LoggerLayoutUI;
+import jkas.androidpe.resourcesUtils.utils.ViewUtils;
 import jkas.codeUtil.CodeUtil;
 
 /**
@@ -40,7 +40,6 @@ public class DrawerInfo {
     private void events() {
         LoggerLayoutUI.get(TAG)
                 .setLogListener(logMsg -> binding.linInfo.addView(InfoView.getView(C, logMsg), 0));
-
         binding.toggleButton.addOnButtonCheckedListener(
                 (mbt, idBtn, checked) -> {
                     if (!checked) return;

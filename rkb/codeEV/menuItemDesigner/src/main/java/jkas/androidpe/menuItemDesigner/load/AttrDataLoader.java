@@ -45,28 +45,14 @@ public class AttrDataLoader {
         final AttrViewAdapter AV = new AttrViewAdapter(C, element, key, listValueAssist);
         AV.setOnAttrChangedListener(
                 new AttrViewAdapter.OnAttrChangedListener() {
-
-                    @Override
-                    public void onDeleted() {
-                        MenuItemDesigner.MainEditor.getInstance().getXmlManager().saveAllModif();
-                        DialogBottomSheetAttrModifier.getInstance(C)
-                                .binding
-                                .linDeclaredAttributes
-                                .removeView(AV.getView());
-
-                        AV.setAutoSave(false);
-                        DialogBottomSheetAttrModifier.getInstance(C)
-                                .binding
-                                .linAllAttributes
-                                .addView(AV.getView(), 0);
-                    }
-
                     @Override
                     public void onChanged() {
                         MenuItemDesigner.MainEditor.getInstance().save();
                     }
                 });
-        AV.setAutoSave(false);
+        AV.setDeleteBtnVisible(false);
+        AV.setAutoRemoveAttrIfEmpty(true);
+        AV.setText("");
         DialogBottomSheetAttrModifier.getInstance(C).binding.linAllAttributes.addView(AV.getView());
     }
 
@@ -99,12 +85,13 @@ public class AttrDataLoader {
                                 .binding
                                 .linDeclaredAttributes
                                 .removeView(AV.getView());
-
-                        AV.setAutoSave(false);
                         DialogBottomSheetAttrModifier.getInstance(C)
                                 .binding
                                 .linAllAttributes
                                 .addView(AV.getView(), 0);
+                        AV.setAutoRemoveAttrIfEmpty(true);
+                        AV.setDeleteBtnVisible(false);
+                        AV.setText("");
                     }
 
                     @Override
@@ -112,7 +99,8 @@ public class AttrDataLoader {
                         MenuItemDesigner.MainEditor.getInstance().save();
                     }
                 });
-        AV.setAutoSave(true);
+        AV.setAutoRemoveAttrIfEmpty(false);
+        AV.setDeleteBtnVisible(true);
         DialogBottomSheetAttrModifier.getInstance(C)
                 .binding
                 .linDeclaredAttributes

@@ -78,9 +78,9 @@
 	<com.google.android.material.card.MaterialCardView
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
-		android:layout_weight="1.0"
 		android:elevation="10dp"
 		android:layout_margin="8dp"
+		android:layout_weight="1.0"
 		android:id="@+id/card">
 
 		<ScrollView
@@ -415,8 +415,9 @@
 		android:layout_width="match_parent"
 		android:padding="8dp"
 		android:layout_marginLeft="8dp"
-		android:id="@+id/checkBoxRec"
 		android:checked="true"
+		android:enabled="false"
+		android:id="@+id/checkBoxRec"
 		android:text="@string/delete_attr_if_empty"/>
 
 </LinearLayout>

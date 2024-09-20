@@ -287,8 +287,7 @@
     <string name="info_the_info_will_be_save_when_modify_text">The information will be saved when you modify text</string>
     <string name="info_there_are_module_depend_on_it">There are modules that depend on it.</string>
     <string name="info_check_your_xml_code">Please check your XML code in the code editor and try again.</string>
-    <string name="info_dialog_attr_modifier_important">Important: Here you can see the reference value of your resource and also modify it. However, the modification has its limits. In the event of an error or a problem, you will be notified. Note that for a change to be saved, you must confirm it by pressing "Save or any other matching key".
-      To add a new resource from here, fill in a new unique name and value as needed.</string>
+    <string name="info_coordinator_layout_attr_test">Please note: this is an experimental feature only. We highly recommend that you consult the official Google documentation.</string>
 
     <!-- MESSAGE ERROR -->
     <string name="msg_error_androidmanifest_file_dose_not_contains_application_tag">The "Application" tag was not found in the AndroidManifest.xml file to extract all declared activities.</string>

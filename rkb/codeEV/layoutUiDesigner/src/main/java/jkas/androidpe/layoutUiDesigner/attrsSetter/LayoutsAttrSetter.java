@@ -3,6 +3,8 @@ package jkas.androidpe.layoutUiDesigner.attrsSetter;
 import android.view.View;
 import android.widget.Toast;
 import jkas.androidpe.layoutUiDesigner.dialog.DialogBottomSheetAttrSetter;
+import jkas.androidpe.layoutUiDesigner.dialog.attrs.DialogLayoutConstraintLayout;
+import jkas.androidpe.layoutUiDesigner.dialog.attrs.DialogLayoutCoordinatorLayout;
 import jkas.androidpe.layoutUiDesigner.dialog.attrs.DialogLayoutParams;
 import jkas.androidpe.layoutUiDesigner.dialog.attrs.DialogLayoutRelativeLayout;
 import jkas.codeUtil.CodeUtil;
@@ -15,6 +17,8 @@ public class LayoutsAttrSetter {
     private DialogBottomSheetAttrSetter dialog;
     private DialogLayoutParams dialogLayoutParams;
     private DialogLayoutRelativeLayout dialogRelativeLayout;
+    private DialogLayoutCoordinatorLayout dialogCoordinatorLayout;
+    private DialogLayoutConstraintLayout dialogConstraintLayout;
 
     private boolean show = true;
 
@@ -22,6 +26,8 @@ public class LayoutsAttrSetter {
         this.dialog = dialog;
         this.dialogLayoutParams = new DialogLayoutParams(dialog.C);
         this.dialogRelativeLayout = new DialogLayoutRelativeLayout(dialog.C);
+        this.dialogCoordinatorLayout = new DialogLayoutCoordinatorLayout(dialog.C);
+        this.dialogConstraintLayout = new DialogLayoutConstraintLayout(dialog.C);
 
         events();
         listeners();
@@ -103,6 +109,18 @@ public class LayoutsAttrSetter {
                 () -> {
                     dialog.setValueChanged();
                 });
+
+        // CoordinatorLayout
+        dialogCoordinatorLayout.setOnChangeListener(
+                () -> {
+                    dialog.setValueChanged();
+                });
+
+        // ConstraintLayout
+        dialogConstraintLayout.setOnChangeListener(
+                () -> {
+                    dialog.setValueChanged();
+                });
     }
 
     private void events() {
@@ -131,13 +149,10 @@ public class LayoutsAttrSetter {
                 vrl -> dialogRelativeLayout.show(dialog.element));
 
         dialog.binding.btnConstraintLayout.setOnClickListener(
-                vctl -> {
-                    Toast.makeText(dialog.C, "soon", Toast.LENGTH_SHORT).show();
-                });
+                vcdl -> dialogConstraintLayout.show(dialog.element));
 
         dialog.binding.btnCoordinatorLayout.setOnClickListener(
-                vcdl -> {
-                    Toast.makeText(dialog.C, "soon", Toast.LENGTH_SHORT).show();
-                });
+                vcdl -> dialogCoordinatorLayout.show(dialog.element));
+        ;
     }
 }

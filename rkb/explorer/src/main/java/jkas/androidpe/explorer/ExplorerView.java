@@ -27,6 +27,7 @@ import jkas.androidpe.explorer.dialog.DialogNewFolder;
 import jkas.androidpe.logger.Logger;
 import jkas.androidpe.projectUtils.current.ProjectsModules;
 import jkas.androidpe.resources.R;
+import jkas.androidpe.resourcesUtils.adapters.BottomMarginItemDecorationAdapter;
 import jkas.androidpe.resourcesUtils.utils.ProjectsPathUtils;
 import jkas.codeUtil.Files;
 
@@ -389,31 +390,10 @@ public class ExplorerView {
 
                         int margin = 200;
                         binding.recyclerView.addItemDecoration(
-                                new BottomMarginItemDecoration(margin));
+                                new BottomMarginItemDecorationAdapter(margin));
                     }
                 });
-
-        adapter.setOnRequestListener(
-                () -> {
-                    listenerRequest.onRefresh();
-                });
-    }
-
-    public class BottomMarginItemDecoration extends RecyclerView.ItemDecoration {
-        private int margin;
-
-        public BottomMarginItemDecoration(int margin) {
-            this.margin = margin;
-        }
-
-        @Override
-        public void getItemOffsets(
-                Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
-                outRect.bottom = margin;
-            }
-        }
+        adapter.setOnRequestListener(() -> listenerRequest.onRefresh());
     }
 
     private void setDefault() {

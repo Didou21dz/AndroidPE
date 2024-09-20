@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
+import jkas.androidpe.layoutUiDesigner.utils.Utils;
 import jkas.androidpe.resourcesUtils.utils.ResourcesValuesFixer;
 
 /**
@@ -24,7 +24,7 @@ public class DefaultView extends TextView {
         int padding = (int) ResourcesValuesFixer.getDimen(ctx, "8dp");
         setPadding(padding, padding, padding, padding);
         setDisplayText();
-        ViewUtils.drawDashPathStroke(this);
+        Utils.drawDashPathStroke(this);
     }
 
     public void setDisplayText() {

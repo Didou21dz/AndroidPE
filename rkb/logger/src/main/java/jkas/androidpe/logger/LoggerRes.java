@@ -26,17 +26,7 @@ public class LoggerRes {
         for (final var listener : logListeners) listener.reloadResRef();
     }
 
-    public static void updateView() {
-        for (final var listener : logListeners) listener.updateView();
-    }
-
     public interface LogListener {
-        default public void reloadResRef(){
-            // must be implemented from others classes
-        }
-
-        default public void updateView() {
-            // nothing
-        }
+        public void reloadResRef();
     }
 }

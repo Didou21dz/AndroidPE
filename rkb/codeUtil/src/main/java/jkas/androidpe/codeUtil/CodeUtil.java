@@ -67,7 +67,6 @@ public class CodeUtil {
 
     */
     // OS
-
     public static void sleepThread(long tmp) {
         try {
             Thread.sleep(tmp);
@@ -151,7 +150,6 @@ public class CodeUtil {
 
     */
     // storage requests
-
     public static boolean checkIfPermissionAccessStorageGranted(Context context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_DENIED

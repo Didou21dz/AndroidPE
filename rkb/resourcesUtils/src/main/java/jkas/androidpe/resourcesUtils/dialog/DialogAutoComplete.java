@@ -8,26 +8,32 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.util.ArrayList;
+import java.util.List;
 import jkas.androidpe.resources.R;
-import jkas.androidpe.resourcesUtils.databinding.DialogEditTextBinding;
+import jkas.androidpe.resourcesUtils.adapters.CustomAutoCompleteAdapter;
+import jkas.androidpe.resourcesUtils.databinding.DialogAutoCompleteBinding;
+import jkas.androidpe.resourcesUtils.utils.ResourcesValuesFixer;
 
 /**
  * @author JKas
  */
-public class DialogEditText {
+public class DialogAutoComplete {
     private OnChangeDetected listener;
     private Context C;
-    private DialogEditTextBinding binding;
+    private DialogAutoCompleteBinding binding;
     private MaterialAlertDialogBuilder builder;
     private String pattern, msgError, text = "";
+    private ArrayList<String> list = new ArrayList<>();
+    private ArrayList<String> listAdapter = new ArrayList<>();
     private boolean withConfirmation = false;
 
-    public DialogEditText(Context c) {
+    public DialogAutoComplete(Context c) {
         C = c;
         init();
     }
 
-    public void setTitle(@NonNull String title) {
+    public void setTitle(String title) {
         builder.setTitle(title);
     }
 
@@ -35,8 +41,12 @@ public class DialogEditText {
         binding.til.setHint(hint);
     }
 
+    public void showError(String msgError) {
+        binding.til.setError(msgError);
+    }
+
     public void setDefaultValue(@NonNull String value) {
-        binding.textInput.setText(value);
+        binding.autoComp.setText(value);
         text = value;
     }
 
@@ -52,8 +62,15 @@ public class DialogEditText {
         this.msgError = msgError;
     }
 
-    public void setPattern(@Nullable String pattern) {
-        this.pattern = pattern;
+    public void setListForAutoCompletion(final List<String> list) {
+        this.list.clear();
+        this.list.addAll(list);
+        this.listAdapter.clear();
+        this.listAdapter.addAll(list);
+        final CustomAutoCompleteAdapter adapter =
+                new CustomAutoCompleteAdapter(
+                        C, android.R.layout.simple_dropdown_item_1line, listAdapter);
+        binding.autoComp.setAdapter(adapter);
     }
 
     public void show() {
@@ -63,22 +80,17 @@ public class DialogEditText {
 
     private void events() {
         if (withConfirmation) {
-            builder.setNegativeButton(R.string.cancel, null);
+            builder.setNegativeButton(R.string.cancel, (d, v) -> listener.onValueConfirmed(false));
             builder.setPositiveButton(
                     R.string.save,
                     (d, v) -> {
-                        listener.onTextChanged(binding.textInput.getText().toString());
-                        if (pattern != null) {
-                            if (text.matches(pattern) || (text + "rkb").matches(pattern))
-                                listener.onValueConfirmed(true);
-                            else {
-                                listener.onValueConfirmed(false);
-                            }
-                        } else listener.onValueConfirmed(true);
+                        listener.onTextChanged(binding.autoComp.getText().toString());
+                        if (binding.til.getError() == null) listener.onValueConfirmed(true);
+                        else listener.onValueConfirmed(false);
                     });
         }
 
-        binding.textInput.addTextChangedListener(
+        binding.autoComp.addTextChangedListener(
                 new TextWatcher() {
                     @Override
                     public void beforeTextChanged(
@@ -90,24 +102,14 @@ public class DialogEditText {
                     @Override
                     public void afterTextChanged(Editable edit) {
                         binding.til.setError(null);
-                        if (pattern == null) return;
-                        text = edit.toString();
-                        if (text.matches(pattern)) {
-                            listener.onTextChanged(text);
-                            if (!withConfirmation) listener.onValueConfirmed(true);
-                        } else if ((text + "rkb").matches(pattern)) {
-                            listener.onTextChanged(text);
-                            if (!withConfirmation) listener.onValueConfirmed(true);
-                        } else {
-                            listener.onValueConfirmed(false);
-                            binding.til.setError(msgError);
-                        }
+                        if (listener != null) if (listener.onTextChanged(edit.toString())) return;
+                        binding.til.setError(C.getString(R.string.invalide_entry));
                     }
                 });
     }
 
     private void init() {
-        binding = DialogEditTextBinding.inflate(LayoutInflater.from(C));
+        binding = DialogAutoCompleteBinding.inflate(LayoutInflater.from(C));
         builder = new MaterialAlertDialogBuilder(C);
         builder.setView(binding.getRoot());
     }
@@ -117,7 +119,7 @@ public class DialogEditText {
     }
 
     public interface OnChangeDetected {
-        public void onTextChanged(String text);
+        public boolean onTextChanged(String text);
 
         public void onValueConfirmed(boolean match);
     }

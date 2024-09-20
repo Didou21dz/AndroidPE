@@ -56,13 +56,13 @@ public class AdditionnalAttrSetter {
         dialog.binding.linAllAttributes.removeAllViews();
         for (String attr : list) {
             final AttrViewAdapter AV = new AttrViewAdapter(C, dialog.element, attr, getList(attr));
+            AV.setDeleteBtnVisible(true);
+            AV.setAutoRemoveAttrIfEmpty(false);
             AV.setOnAttrChangedListener(
                     new AttrViewAdapter.OnAttrChangedListener() {
                         @Override
                         public void onDeleted() {
-                            AV.setAutoSave(false);
                             dialog.binding.linAllAttributes.removeView(AV.getView());
-                            dialog.setValueChanged();
                         }
 
                         @Override
@@ -70,7 +70,6 @@ public class AdditionnalAttrSetter {
                             dialog.setValueChanged();
                         }
                     });
-            AV.setAutoSave(true);
             dialog.binding.linAllAttributes.addView(AV.getView());
         }
     }

@@ -27,6 +27,7 @@ public class DialogLayoutRelativeLayout {
     private DialogLayoutRelativeLayoutBinding binding;
     private MaterialAlertDialogBuilder dialog;
     private ArrayList<String> listId = new ArrayList<>();
+    private ArrayList<String> listIdAdapter = new ArrayList<>();
 
     public DialogLayoutRelativeLayout(Context c) {
         C = c;
@@ -96,16 +97,14 @@ public class DialogLayoutRelativeLayout {
         ms.setOnCheckedChangeListener(
                 (c, b) -> {
                     if (b) element.setAttribute(ms.getText().toString(), "" + b);
-                    else if (binding.checkBoxRec.isChecked()) {
-                        element.removeAttribute(ms.getText().toString());
-                    }
+                    else element.removeAttribute(ms.getText().toString());
                 });
     }
 
     private void setEdit(final TextInputLayout til, final AutoCompleteTextView edit) {
-        CustomAutoCompleteAdapter adapter =
+        final CustomAutoCompleteAdapter adapter =
                 new CustomAutoCompleteAdapter(
-                        C, android.R.layout.simple_dropdown_item_1line, listId);
+                        C, android.R.layout.simple_dropdown_item_1line, listIdAdapter);
         edit.setText(element.getAttribute(til.getHint().toString()));
         edit.setAdapter(adapter);
         edit.addTextChangedListener(
@@ -121,11 +120,14 @@ public class DialogLayoutRelativeLayout {
                     public void afterTextChanged(Editable editable) {
                         til.setError(null);
                         element.setAttribute(til.getHint().toString(), editable.toString());
-                        if (editable.toString().trim().isEmpty()
-                                || !editable.toString().trim().startsWith("@id/")) {
+                        if (editable.toString().trim().isEmpty()) {
                             element.removeAttribute(til.getHint().toString());
+                        } else if (!editable.toString().trim().startsWith("@id/")
+                                && !editable.toString().trim().startsWith("@+id/")) {
+                            til.setError("Fill in a correct ID");
                             return;
-                        } else if (editable.toString().trim().startsWith("@id/")) {
+                        } else if (editable.toString().trim().startsWith("@id/")
+                                || editable.toString().trim().startsWith("@+id/")) {
                             boolean verif = false;
                             for (String s : listId) {
                                 verif = s.equals(editable.toString());
@@ -143,13 +145,14 @@ public class DialogLayoutRelativeLayout {
                 XmlManager.getAllFirstChildFromElement((Element) element.getParentNode())) {
             String id = e.getAttribute("android:id");
             if (id.startsWith("@+id/")) {
-                id = "@id/" + id.split("\\/")[1];
-                if (!element.getAttribute("android:id").endsWith("/" + id.split("\\/")[1])) {
-                    list.add(id);
-                }
+                list.add(id);
+                list.add("@id/" + id.split("\\/")[1]);
             }
         }
-        listId = list;
+        listId.clear();
+        listId.addAll(list);
+        listIdAdapter.clear();
+        listIdAdapter.addAll(list);
         if (list.size() == 0) {
             binding.tv.setText("No other IDs were found.");
             binding.tv.setTextColor(ResourcesValuesFixer.getColor(C, "?colorPrimary"));
@@ -165,7 +168,6 @@ public class DialogLayoutRelativeLayout {
         dialog.setTitle("RelativeLayout");
         dialog.setView(binding.getRoot());
         binding.viewFlipper.dispatchDisplayHint(0);
-
         initId();
         events();
     }
@@ -175,6 +177,7 @@ public class DialogLayoutRelativeLayout {
 
         init();
         dialog.show();
+        binding.toggleType.check(binding.btnParent.getId());
     }
 
     public void setOnChangeListener(OnChangedListener listener) {

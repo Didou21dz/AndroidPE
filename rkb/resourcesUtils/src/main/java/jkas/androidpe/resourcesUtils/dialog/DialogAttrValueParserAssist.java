@@ -36,13 +36,12 @@ public class DialogAttrValueParserAssist {
     private DialogAttrValueParserAssistBinding binding;
     private MaterialAlertDialogBuilder builder;
     private String attr;
-    private String currentValue;
     private String typeValue;
+    private String currentValue;
     private Element element;
     private Map<String, String> allData = new HashMap<>();
     private ArrayList<String> listAdapter = new ArrayList<>();
     private ArrayList<String> listAdapterAssist = new ArrayList<>();
-    private String important = "", INFO = "";
     private ArrayList<String> listResForAdd = new ArrayList<>();
 
     public DialogAttrValueParserAssist(Context c) {
@@ -51,28 +50,21 @@ public class DialogAttrValueParserAssist {
     }
 
     public void parseValues(
-            Element element,
-            String attr,
-            String currentValue,
-            String typeValue,
-            ArrayList<String> listAdapter) {
+            Element element, String attr, String typeValue, ArrayList<String> listAdapter) {
         this.element = element;
         this.attr = attr;
-        this.currentValue = currentValue;
         this.typeValue = typeValue;
-
+        this.currentValue = element.getAttribute(attr);
         this.listAdapter.clear();
         this.listAdapter.addAll(listAdapter);
         this.listAdapterAssist.clear();
         this.listAdapterAssist.addAll(listAdapter);
-
-        init();
-        loadData();
         searchAllFilesRefForAdd();
+        init();
+        events();
+        loadData();
         loadDefault();
         loadDefaultSetting();
-        events();
-        textChanged(binding.editRef.getText().toString());
     }
 
     private void searchAllFilesRefForAdd() {
@@ -83,16 +75,13 @@ public class DialogAttrValueParserAssist {
                 MP = mp;
             }
         }
-
         { // add for current module
             String path = DataRefManager.getProjectAbsolutePath();
             path += DataRefManager.getInstance().currentModuleRes.getPath().replace(":", "/");
             path += ProjectsPathUtils.VALUES_PATH;
             for (String p : Files.listFile(path)) if (p.endsWith(".xml")) listResForAdd.add(p);
         }
-
         if (MP == null) return;
-
         for (String pathModuleRes : MP.getRefToOtherModule()) {
             for (ModuleRes mr : DataRefManager.getInstance().listModuleRes) {
                 if (!mr.getPath().equals(pathModuleRes)) continue;
@@ -118,7 +107,6 @@ public class DialogAttrValueParserAssist {
             allData.putAll(DataRefManager.getInstance().currentModuleRes.valuesIntegers);
         else if (typeValue.equals("@style"))
             allData.putAll(DataRefManager.getInstance().currentModuleRes.valuesStyles);
-
         if (typeValue.contains("drawable")) {
             allData.putAll(DataRefManager.getInstance().currentModuleRes.drawables);
             allData.putAll(DataRefManager.getInstance().currentModuleRes.mipmaps);
@@ -150,16 +138,9 @@ public class DialogAttrValueParserAssist {
                     public void afterTextChanged(Editable editable) {
                         if (editable.toString().trim().length() == 0) {
                             new Handler(Looper.getMainLooper())
-                                    .postDelayed(
-                                            new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    binding.editRef.showDropDown();
-                                                }
-                                            },
-                                            50);
+                                    .postDelayed(() -> binding.editRef.showDropDown(), 43);
                         }
-                        textChanged(editable.toString());
+                        showValue(editable.toString());
                         if (editable.toString().equals(currentValue))
                             binding.imgSwitch.setVisibility(View.GONE);
                         else binding.imgSwitch.setVisibility(View.VISIBLE);
@@ -207,11 +188,6 @@ public class DialogAttrValueParserAssist {
                     binding.editRef.setText(listAdapter.get(position - 1));
                 });
 
-        binding.icIconeMoreInfo.setOnClickListener(
-                v -> {
-                    DialogBuilder.showDialog(C, null, INFO + important);
-                });
-
         binding.btnPickColor.setOnClickListener(
                 v1 -> {
                     final ColorPickerView picker = new ColorPickerView(C);
@@ -254,15 +230,6 @@ public class DialogAttrValueParserAssist {
                             });
                     show();*/
                 });
-    }
-
-    private void textChanged(String text) {
-        updateInfo(text);
-        showValue(text);
-    }
-
-    private void updateInfo(String text) {
-        // soon or maybe never
     }
 
     private void showValue(String text) {
@@ -334,17 +301,9 @@ public class DialogAttrValueParserAssist {
     }
 
     private void loadDefault() {
-        binding.tvMoreInfo.setText(typeValue.substring(1).toUpperCase());
+        builder.setTitle(typeValue.substring(1).toUpperCase());
         binding.tilRef.setHint(attr);
-
         binding.editRef.setText(currentValue);
-        binding.editValue.setText("");
-        if (!currentValue.matches("\\?[a-zA-Z][a-zA-Z0-9]") && !currentValue.startsWith("@")) {
-            binding.editRef.setText("");
-            binding.editValue.setText(currentValue);
-        }
-
-        important = C.getString(R.string.info_dialog_attr_modifier_important);
     }
 
     private void init() {
@@ -397,7 +356,7 @@ public class DialogAttrValueParserAssist {
 
             if (ref.contains("/")) ref = ref.split("\\/")[1];
             for (String path : listResForAdd) {
-                XmlManager xmlFile = new XmlManager(C);
+                final XmlManager xmlFile = new XmlManager(C);
                 xmlFile.initializeFromPath(path);
                 if (!xmlFile.isInitialized) continue;
 
@@ -405,7 +364,7 @@ public class DialogAttrValueParserAssist {
                 if (listE.size() == 0) continue;
                 Element e = listE.get(0);
 
-                for (Element child : XmlManager.getAllChildFromElement(e)) {
+                for (Element child : XmlManager.getAllFirstChildFromElement(e)) {
                     if (child.getAttribute("name").equals(ref)) {
                         if (!child.getTextContent().equals(value)) {
                             child.setTextContent(value);

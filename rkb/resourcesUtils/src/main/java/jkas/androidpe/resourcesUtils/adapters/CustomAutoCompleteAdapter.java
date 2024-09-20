@@ -29,15 +29,18 @@ public class CustomAutoCompleteAdapter extends ArrayAdapter<String> implements F
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 filteredItems.clear();
-
-                if (constraint != null) {
-                    for (String item : originalItems) {
-                        if (item.matches(".*" + constraint.toString().replace(" ", "_") + ".*")) {
-                            filteredItems.add(item);
+                try {
+                    if (constraint != null) {
+                        for (String item : originalItems) {
+                            if (item.matches(
+                                    ".*" + constraint.toString().replace(" ", "_") + ".*")) {
+                                filteredItems.add(item);
+                            }
                         }
                     }
+                } catch (Exception err) {
+                    // cannot retrieve the list.
                 }
-
                 results.values = filteredItems;
                 results.count = filteredItems.size();
                 return results;

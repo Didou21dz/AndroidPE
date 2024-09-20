@@ -1,5 +1,8 @@
 package jkas.androidpe.layoutUiDesigner;
 
+import static jkas.androidpe.layoutUiDesigner.utils.Utils.drawDashPath;
+import static jkas.androidpe.layoutUiDesigner.utils.Utils.drawDashPathStroke;
+import static jkas.androidpe.layoutUiDesigner.utils.Utils.drawDashPathStrokeSelected;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Handler;
@@ -28,7 +31,7 @@ import jkas.androidpe.layoutUiDesigner.tools.RefViewElement;
 import jkas.androidpe.layoutUiDesigner.tools.ViewCreator;
 import jkas.androidpe.layoutUiDesigner.utils.DragAndDropUtils;
 import jkas.androidpe.layoutUiDesigner.utils.Utils;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
+import jkas.androidpe.layoutUiDesigner.utils.Utils.CurrentSettings;
 import jkas.androidpe.logger.LoggerLayoutUI;
 import jkas.androidpe.resources.R;
 import jkas.androidpe.resourcesUtils.dialog.DialogBuilder;
@@ -36,9 +39,11 @@ import jkas.androidpe.resourcesUtils.dialog.DialogProgressIndeterminate;
 import jkas.androidpe.resourcesUtils.utils.ResCodeUtils;
 import jkas.androidpe.resourcesUtils.utils.ResFormatter;
 import jkas.androidpe.resourcesUtils.utils.ResourcesValuesFixer;
+import jkas.androidpe.resourcesUtils.utils.ViewUtils;
 import jkas.codeUtil.CodeUtil;
 import jkas.codeUtil.Files;
 import jkas.codeUtil.XmlManager;
+
 import org.w3c.dom.Element;
 
 /**
@@ -62,7 +67,6 @@ public class LayoutUiDesigner {
     private boolean fullscreen = false;
     private boolean viewEnable = false;
     private boolean enteredDelete = false;
-
     private boolean bClick = true;
     private float startX = 0f;
     private float startY = 0f;
@@ -232,7 +236,7 @@ public class LayoutUiDesigner {
 
                         case DragEvent.ACTION_DROP:
                             try {
-                                if (!ViewUtils.CurrentSettings.addByDrag && enteredDelete) {
+                                if (!CurrentSettings.addByDrag && enteredDelete) {
                                     View view = (View) e.getLocalState();
                                     Element element =
                                             androidXmlParser
@@ -260,7 +264,7 @@ public class LayoutUiDesigner {
     }
 
     private void setViewEvent(final View view, final boolean root) {
-        if (!ViewUtils.CurrentSettings.isDrawStrokeEnabled) return;
+        if (!CurrentSettings.isDrawStrokeEnabled) return;
 
         if (view instanceof ViewGroup && !(view instanceof AdapterView))
             view.setOnDragListener(getDragListener());
@@ -292,7 +296,7 @@ public class LayoutUiDesigner {
                             @Override
                             public void onLongPress(MotionEvent event) {
                                 if (bClick) {
-                                    ViewUtils.CurrentSettings.addByDrag = false;
+                                    CurrentSettings.addByDrag = false;
                                     if (!root) DragAndDropUtils.startDragAndDrop(view, null, view);
                                 }
                             }
@@ -310,20 +314,19 @@ public class LayoutUiDesigner {
                                 diffX = Math.abs(startX - endX);
                                 diffY = Math.abs(startY - endY);
                                 if (diffX > 7.6 || diffY > 7.6) {
-                                    ViewUtils.drawDashPathStroke(v);
+                                    drawDashPathStroke(v);
                                     bClick = false;
 
                                     if (v.getParent() != null) {
                                         View vp = (View) v.getParent();
-                                        if (!(vp instanceof MainView))
-                                            ViewUtils.drawDashPathStroke(vp);
+                                        if (!(vp instanceof MainView)) drawDashPathStroke(vp);
                                     }
                                 }
                         }
 
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
-                                ViewUtils.drawDashPathStrokeSelected(v);
+                                drawDashPathStrokeSelected(v);
                                 startX = event.getX();
                                 startY = event.getY();
                                 bClick = true;
@@ -331,7 +334,7 @@ public class LayoutUiDesigner {
                                 return true;
 
                             case MotionEvent.ACTION_UP:
-                                ViewUtils.drawDashPathStroke(v);
+                                drawDashPathStroke(v);
                                 endX = event.getX();
                                 endY = event.getY();
                                 diffX = Math.abs(startX - endX);
@@ -341,7 +344,7 @@ public class LayoutUiDesigner {
                                 break;
 
                             case MotionEvent.ACTION_CANCEL:
-                                ViewUtils.drawDashPathStroke(v);
+                                drawDashPathStroke(v);
                                 bClick = false;
                         }
                         return false;
@@ -403,7 +406,7 @@ public class LayoutUiDesigner {
     }
 
     private void updateDeleteEvent(boolean entered) {
-        if (ViewUtils.CurrentSettings.addByDrag) {
+        if (CurrentSettings.addByDrag) {
             binding.imgDelete.setImageResource(R.drawable.ic_cancel);
             if (entered) {
                 ViewUtils.setBgCornerRadius(binding.imgDelete, C.getColor(R.color.warning));
@@ -516,11 +519,11 @@ public class LayoutUiDesigner {
                             m -> {
                                 if (m.getItemId()
                                         == jkas.androidpe.layoutUiDesigner.R.id.menu_design) {
-                                    ViewUtils.CurrentSettings.isDrawStrokeEnabled = false;
+                                    CurrentSettings.isDrawStrokeEnabled = false;
                                     refreshData();
                                 } else if (m.getItemId()
                                         == jkas.androidpe.layoutUiDesigner.R.id.menu_edit) {
-                                    ViewUtils.CurrentSettings.isDrawStrokeEnabled = true;
+                                    CurrentSettings.isDrawStrokeEnabled = true;
                                     refreshData();
                                 }
                                 return true;

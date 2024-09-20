@@ -6,9 +6,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ThemeOverlay.App.Preference</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item
-            name="android:windowLightNavigationBar"
-            tools:targetApi="27">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style
@@ -40,6 +38,8 @@
         <item name="colorOnBackground">@color/dark_colorOnBackground</item>
 
         <item name="colorSurface">@color/dark_colorSurface</item>
+        <item name="colorSurfaceContainerHigh">@color/dark_colorSurfaceContainerHigh</item>
+        <item name="colorSurfaceContainerLow">@color/dark_colorSurfaceContainerLow</item>
         <item name="colorOnSurface">@color/dark_colorOnSurface</item>
         <item name="colorSurfaceVariant">@color/dark_colorSurfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/dark_colorOnSurfaceVariant</item>

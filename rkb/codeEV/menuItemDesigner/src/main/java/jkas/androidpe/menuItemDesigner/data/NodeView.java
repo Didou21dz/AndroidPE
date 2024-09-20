@@ -64,7 +64,6 @@ public class NodeView {
                             public void onRefresh() {
                                 MenuItemDesigner.MainEditor.getInstance().save();
                                 MenuItemDesigner.MainEditor.getInstance().refresh();
-                                LoggerRes.updateView();
                             }
                         });
 
@@ -94,12 +93,10 @@ public class NodeView {
                             case 1:
                                 addItem(eItem, TYPE_ITEM);
                                 MenuItemDesigner.MainEditor.getInstance().refresh();
-                                LoggerRes.updateView();
                                 break;
                             case 2:
                                 addItem(eItem, TYPE_GROUP);
                                 MenuItemDesigner.MainEditor.getInstance().refresh();
-                                LoggerRes.updateView();
                                 break;
                             case 3:
                                 deleteItem(eItem);
@@ -179,7 +176,6 @@ public class NodeView {
                                 MenuItemDesigner.MainEditor.getInstance().save();
                                 DialogBottomSheetAttrModifier.getInstance(C).BSD.cancel();
                                 MenuItemDesigner.MainEditor.getInstance().refresh();
-                                LoggerRes.updateView();
                             } else
                                 Toast.makeText(C, R.string.cant_delete, Toast.LENGTH_SHORT).show();
                         })

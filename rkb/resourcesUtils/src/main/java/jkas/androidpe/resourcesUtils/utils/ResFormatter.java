@@ -33,14 +33,14 @@ public class ResFormatter {
                         for (int i = 0; i < parser.getAttributeCount(); i++) {
                             String attrName = parser.getAttributeName(i);
                             String attrValue = parser.getAttributeValue(i);
-
                             attrValue = attrValue.replace("<", "&lt;");
                             attrValue = attrValue.replace(">", " &gt;");
                             attrValue = attrValue.replace("&", "&amp;");
+                            attrValue = attrValue.replace("&amp;lt;", "&lt;");
+                            attrValue = attrValue.replace("&amp;gt;", "&gt;");
                             attrValue = attrValue.replace("\"", "\\\"");
                             attrValue = attrValue.replace("\'", "\\\'");
                             attrValue = attrValue.replace("\\\\", "\\");
-
                             if (multiAttr) {
                                 CODE += "\n" + getTab() + attrName + "=\"" + attrValue + "\"";
                             } else {

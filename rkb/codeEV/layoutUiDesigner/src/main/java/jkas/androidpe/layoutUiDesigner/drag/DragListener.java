@@ -10,7 +10,8 @@ import android.view.ViewParent;
 import android.widget.LinearLayout;
 import jkas.androidpe.layoutUiDesigner.tools.AndroidXmlParser;
 import jkas.androidpe.layoutUiDesigner.tools.RefViewElement;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
+import jkas.androidpe.layoutUiDesigner.utils.Utils;
+import jkas.androidpe.resourcesUtils.utils.ViewUtils;
 import jkas.codeUtil.CodeUtil;
 import org.w3c.dom.Element;
 
@@ -49,7 +50,7 @@ public class DragListener implements View.OnDragListener {
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     removeViewFromCurrentParent(draggedView);
-                    ViewUtils.drawDashPathStrokeSelected(newViewParent);
+                    Utils.drawDashPathStrokeSelected(newViewParent);
                     break;
                 case DragEvent.ACTION_DRAG_LOCATION:
                     dropPosition = getDropPosition(event);
@@ -62,7 +63,7 @@ public class DragListener implements View.OnDragListener {
                     break;
                 case DragEvent.ACTION_DRAG_ENDED, DragEvent.ACTION_DRAG_EXITED:
                     removeViewFromCurrentParent(shadow);
-                    ViewUtils.drawDashPathStroke(newViewParent);
+                    Utils.drawDashPathStroke(newViewParent);
                     if (listener != null) listener.info(null);
                     break;
             }
@@ -101,7 +102,6 @@ public class DragListener implements View.OnDragListener {
 
     private void updateXmlRef() {
         Element childSubling = null;
-
         if (orientation != -1) {
             if (newContainer.getChildCount() > 0) {
                 for (var te :
@@ -117,13 +117,11 @@ public class DragListener implements View.OnDragListener {
                 }
             }
         }
-
         var teCurrent =
                 listener.onAndroidXmlParserNeeded()
                         .getRefViewElement()
                         .getTreeElement(currentElement);
         if (teCurrent != null) teCurrent.setParent(newParentElement);
-
         for (var te :
                 listener.onAndroidXmlParserNeeded().getRefViewElement().getListTreeElement()) {
             if (te.getCurrentElement() == newParentElement) {
@@ -133,7 +131,6 @@ public class DragListener implements View.OnDragListener {
                 break;
             }
         }
-
         if (childSubling == null) newParentElement.appendChild(currentElement);
         else newParentElement.insertBefore(currentElement, childSubling);
         listener.onAndroidXmlParserNeeded().setAttr(draggedView, currentElement);
@@ -146,7 +143,6 @@ public class DragListener implements View.OnDragListener {
                         .getRefViewElement()
                         .getListRef()
                         .get(this.newViewParent);
-
         Element childSubling = null;
         if (orientation != -1) {
             if (newContainer.getChildCount() > 0) {
@@ -163,7 +159,6 @@ public class DragListener implements View.OnDragListener {
                 }
             }
         }
-
         for (var te :
                 listener.onAndroidXmlParserNeeded().getRefViewElement().getListTreeElement()) {
             if (te.getCurrentElement() == newParent) {
@@ -172,10 +167,8 @@ public class DragListener implements View.OnDragListener {
                 break;
             }
         }
-
         RefViewElement.TreeElement te = new RefViewElement.TreeElement(newElement, false);
         te.setParent(newParent);
-
         if (childSubling != null) newParent.insertBefore(newElement, childSubling);
         else newParent.appendChild(newElement);
         listener.onAndroidXmlParserNeeded().setAttr(draggedView, newElement);
@@ -190,11 +183,9 @@ public class DragListener implements View.OnDragListener {
                         .getXmlManager()
                         .getDocument()
                         .createElement(pkg);
-
         element.setAttribute("android:layout_width", "wrap_content");
         element.setAttribute("android:layout_height", "wrap_content");
         element.setAttribute("android:padding", "8dp");
-
         return element;
     }
 

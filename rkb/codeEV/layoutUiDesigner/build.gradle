@@ -36,6 +36,7 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.androidx.coordinatorlayout
     implementation libs.androidx.swiperefreshlayout
+    implementation libs.group.box.layout
     
     implementation 'io.github.Rosemoe.sora-editor:editor:0.22.1'
     implementation 'io.github.Rosemoe.sora-editor:language-textmate:0.22.1'

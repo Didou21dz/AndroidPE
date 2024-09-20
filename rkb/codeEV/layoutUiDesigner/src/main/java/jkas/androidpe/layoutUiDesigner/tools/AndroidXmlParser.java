@@ -12,10 +12,9 @@ import java.util.ArrayList;
 import jkas.androidpe.layoutUiDesigner.dialog.DialogBottomSheetAttrSetter;
 import jkas.androidpe.layoutUiDesigner.palette.MainView;
 import jkas.androidpe.layoutUiDesigner.treeView.TreeNodeView;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
+import jkas.androidpe.layoutUiDesigner.utils.Utils;
 import jkas.androidpe.logger.LoggerLayoutUI;
 import jkas.androidpe.projectUtils.current.Environment;
-import jkas.androidpe.resourcesUtils.utils.ResFormatter;
 import jkas.androidpe.resourcesUtils.utils.ResourcesValuesFixer;
 import jkas.codeUtil.Files;
 import jkas.codeUtil.XmlManager;
@@ -87,7 +86,7 @@ public class AndroidXmlParser {
 
     public void setAttr(View v, Element e) {
         attrSetter.set(v, e);
-        ViewUtils.drawDashPathStroke(v);
+        Utils.drawDashPathStroke(v);
     }
 
     private void parse() {
@@ -102,13 +101,8 @@ public class AndroidXmlParser {
         searchForError();
         parseView();
 
-        for (Pair<View, Element> pair : attrViewNeedToBeReloaded) {
-            attrSetter.set(pair.first, pair.second);
-        }
-
-        for (Pair<View, Element> pair : attrViewNeedToBeReloaded) {
-            ViewUtils.drawDashPathStroke(pair.first);
-        }
+        for (var pair : attrViewNeedToBeReloaded) attrSetter.set(pair.first, pair.second);
+        for (var pair : attrViewNeedToBeReloaded) Utils.drawDashPathStroke(pair.first);
 
         updateTreeView();
         listener.onFinish();
@@ -144,7 +138,7 @@ public class AndroidXmlParser {
 
             final RefViewElement.TreeElement teChild = refViewElement.getTreeElement(eChild);
             if (teChild.getChildren().size() > 0) isChildParent = true;
-            else isChildParent = ViewUtils.isParentView(C, eChild.getNodeName());
+            else isChildParent = Utils.isParentView(C, eChild.getNodeName());
 
             final TreeNodeView tnvChild = new TreeNodeView(C, eChild, isChildParent);
             tnvChild.binding.linView.setOnClickListener(
@@ -163,21 +157,21 @@ public class AndroidXmlParser {
             debug.e("Xml Code", "Cannot display Views, please fix the problem detected.");
             return;
         }
-
         try {
             final Element root = xmlFile.getFirstElement();
             if (root == null)
                 throw new Exception("No elements were found in the code. please check that.");
-
             int attr = -1;
-            String style = root.getAttribute("style");
-            if (style == null || style.length() == 0) style = root.getAttribute("android:style");
-            if (style != null && style.length() != 0) {
-                if (style.startsWith("@style/") || style.startsWith("@android:style/"))
-                    attr = ResourcesValuesFixer.getStyle(style);
-                else attr = ResourcesValuesFixer.getAttr(style);
+            if (!root.getNodeName().contains("Switch")) {
+                String style = root.getAttribute("style");
+                if (style == null || style.length() == 0)
+                    style = root.getAttribute("android:style");
+                if (style != null && style.length() != 0) {
+                    if (style.startsWith("@style/") || style.startsWith("@android:style/"))
+                        attr = ResourcesValuesFixer.getStyle(style);
+                    else attr = ResourcesValuesFixer.getAttr(style);
+                }
             }
-
             boolean isParent = (root.getFirstChild() != null);
             final View view;
             if (attr != -1)
@@ -208,13 +202,16 @@ public class AndroidXmlParser {
         for (final Element eChild : XmlManager.getAllFirstChildFromElement(elementRoot)) {
             try {
                 int attr = -1;
-                String style = eChild.getAttribute("android:style");
-                if (style == null || style.length() == 0) style = eChild.getAttribute("style");
-                if (style != null) {
-                    if (style.startsWith("@")) attr = ResourcesValuesFixer.getStyle(style);
-                    else attr = ResourcesValuesFixer.getAttr(style);
+                if (!eChild.getNodeName().contains("Switch")) {
+                    String style = eChild.getAttribute("style");
+                    if (style == null || style.length() == 0)
+                        style = eChild.getAttribute("android:style");
+                    if (style != null && style.length() != 0) {
+                        if (style.startsWith("@style/") || style.startsWith("@android:style/"))
+                            attr = ResourcesValuesFixer.getStyle(style);
+                        else attr = ResourcesValuesFixer.getAttr(style);
+                    }
                 }
-
                 boolean isParent = XmlManager.getAllFirstChildFromElement(eChild).size() > 0;
                 final View vChild;
                 if (attr != -1) {
@@ -226,12 +223,10 @@ public class AndroidXmlParser {
                             ViewCreator.create(
                                     listener.tagNeeded(), C, eChild.getNodeName(), isParent);
                 }
-
                 final RefViewElement.TreeElement tChild =
                         new RefViewElement.TreeElement(eChild, false);
                 tChild.setParent(elementRoot);
                 teParent.addChild(eChild);
-
                 refViewElement.addTreeRef(tChild);
                 refViewElement.addRef(vChild, eChild);
                 viewParent.addView(vChild);
@@ -284,7 +279,6 @@ public class AndroidXmlParser {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             parser = factory.newPullParser();
-
             attrSetter.setOnDataRefNeeded(
                     new AttributeSetter.OnDataRefNeeded() {
                         @Override

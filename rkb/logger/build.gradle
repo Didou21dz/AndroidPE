@@ -5,7 +5,7 @@ plugins {
 android {
     namespace 'jkas.androidpe.logger'
     
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "34.0.4"
     
     defaultConfig {

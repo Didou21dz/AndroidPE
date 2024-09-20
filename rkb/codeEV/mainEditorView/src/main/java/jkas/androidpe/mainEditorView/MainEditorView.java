@@ -71,6 +71,10 @@ public class MainEditorView {
         viewFlipper.setDisplayedChild(0);
     }
 
+    public void reload() {
+        updateData();
+    }
+
     public void saveContent() {
         CEV.saveContent(path);
     }

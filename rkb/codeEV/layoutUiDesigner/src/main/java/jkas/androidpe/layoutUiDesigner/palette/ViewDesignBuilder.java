@@ -4,10 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import jkas.androidpe.layoutUiDesigner.utils.ViewUtils;
 import jkas.codeUtil.CodeUtil;
 
 /**
@@ -81,6 +79,11 @@ public class ViewDesignBuilder {
     }
 
     public View getView() {
+        if (view == null) {
+            style = -1;
+            initView(pkg);
+            if (view == null) initDefault();
+        }
         return view;
     }
 

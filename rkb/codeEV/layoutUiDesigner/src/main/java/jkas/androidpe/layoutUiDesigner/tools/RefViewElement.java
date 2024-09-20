@@ -58,6 +58,10 @@ public class RefViewElement {
         return listRef.get(v);
     }
 
+    public View getView(Element e) {
+        return listRefInverse.get(e);
+    }
+
     public LinkedHashMap<View, Element> getListRef() {
         return this.listRef;
     }

@@ -60,8 +60,18 @@ public class DrawerPalettes {
 
                                     @Override
                                     public boolean onDragAccepted() {
-                                        drawerLayout.closeDrawers();
-                                        return addType == -1;
+                                        boolean accepted = (addType == -1);
+                                        if (accepted) drawerLayout.closeDrawers();
+                                        else {
+                                            DialogBuilder.showDialog(
+                                                    C,
+                                                    null,
+                                                    "Can not add by drag and drop cause your select add "
+                                                            + addTypeStr
+                                                            + "."
+                                                            + "\n Adding view via Drag and Drop will be available when the drawer is reopened again.");
+                                        }
+                                        return accepted;
                                     }
 
                                     @Override
@@ -128,10 +138,7 @@ public class DrawerPalettes {
     private void createView(ViewPalettesAdapter.DataItem dataItem) {
         try {
             if (addType == -1) return;
-            // create view
-
             final String pkg = getTagName(dataItem);
-
             if (addType == DialogBottomSheetAttrSetter.ADD_SURROUND) {
                 View v = ViewCreator.create("null", C, pkg, false);
                 if (!(v instanceof ViewGroup)) {
@@ -139,7 +146,6 @@ public class DrawerPalettes {
                     return;
                 }
             }
-
             Document doc = listener.onXmlFileNeeded().getDocument();
             final Element eV = doc.createElement(pkg);
             eV.setAttribute("android:layout_width", "wrap_content");
@@ -194,9 +200,7 @@ public class DrawerPalettes {
                     success = true;
                 }
             }
-
             addType = -1;
-
             if (success) {
                 listener.onNewViewAppendByAdd(success);
                 drawerLayout.closeDrawers();
@@ -217,7 +221,6 @@ public class DrawerPalettes {
         binding = LayoutPalettesBinding.inflate(LayoutInflater.from(C));
         binding.navRail.setBackgroundColor(SurfaceColors.SURFACE_2.getColor(C));
         binding.navRail.setLabelVisibilityMode(NavigationRailView.LABEL_VISIBILITY_SELECTED);
-
         binding.listView.setDivider(null);
         binding.listView.setDividerHeight(0);
     }
@@ -225,7 +228,6 @@ public class DrawerPalettes {
     public void setAddRequested(Element element, int addType) {
         this.element = element;
         this.addType = addType;
-
         if (addType == DialogBottomSheetAttrSetter.ADD_INSIDE) addTypeStr = "inside";
         else if (addType == DialogBottomSheetAttrSetter.ADD_BEFORE) addTypeStr = "before";
         else if (addType == DialogBottomSheetAttrSetter.ADD_SURROUND)

@@ -566,7 +566,7 @@ public class AttributeSetter {
                                     view,
                                     "setRotationX",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
 
@@ -576,7 +576,7 @@ public class AttributeSetter {
                                     view,
                                     "setRotationY",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
                     case "translationY":
@@ -585,7 +585,7 @@ public class AttributeSetter {
                                     view,
                                     "setTranslationX",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
                     case "translationX":
@@ -594,7 +594,7 @@ public class AttributeSetter {
                                     view,
                                     "setTranslationY",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
                     case "translationZ":
@@ -603,7 +603,7 @@ public class AttributeSetter {
                                     view,
                                     "setTranslationZ",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
                     case "scaleX":
@@ -612,7 +612,7 @@ public class AttributeSetter {
                                     view,
                                     "setScaleX",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
                     case "scaleZ":
@@ -621,7 +621,7 @@ public class AttributeSetter {
                                     view,
                                     "setScaleY",
                                     new Class[] {float.class},
-                                    Float.parseFloat(value));
+                                    ResourcesValuesFixer.getDimen(C, value));
                         }
                         continue;
                     case "visibility":
@@ -813,6 +813,7 @@ public class AttributeSetter {
                         // End of attributes related to RelativeLayout
 
                         // Start of modifying attributes related to ConstraintLayout
+
                     case "layout_constraintLeft_toLeftOf":
                         if (constraintLayout == null) {
                             if (debug != null)
@@ -843,10 +844,6 @@ public class AttributeSetter {
                         }
                         ConstraintSet constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.LEFT, targetedId, ConstraintSet.LEFT);
                         constraintSet.applyTo(constraintLayout);
@@ -882,10 +879,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.LEFT, targetedId, ConstraintSet.RIGHT);
                         constraintSet.applyTo(constraintLayout);
@@ -921,10 +914,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.RIGHT, targetedId, ConstraintSet.LEFT);
                         constraintSet.applyTo(constraintLayout);
@@ -960,10 +949,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.RIGHT, targetedId, ConstraintSet.RIGHT);
                         constraintSet.applyTo(constraintLayout);
@@ -999,10 +984,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.TOP, targetedId, ConstraintSet.TOP);
                         constraintSet.applyTo(constraintLayout);
@@ -1038,10 +1019,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.TOP, targetedId, ConstraintSet.BOTTOM);
                         constraintSet.applyTo(constraintLayout);
@@ -1077,15 +1054,46 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(),
                                 ConstraintSet.BOTTOM,
                                 targetedId,
                                 ConstraintSet.BOTTOM);
+                        constraintSet.applyTo(constraintLayout);
+                        continue;
+
+                    case "layout_constraintBottom_toTopOf":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_constraintBottom_toTopOf=\""
+                                                + value
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
+                            continue;
+                        }
+
+                        if (targetedId == -1) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "the targeted id("
+                                                + value
+                                                + ") in the method app:layout_constraintBottom_toTopOf=\""
+                                                + value
+                                                + "\""
+                                                + " does not exist.",
+                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.connect(
+                                view.getId(), ConstraintSet.BOTTOM, targetedId, ConstraintSet.TOP);
                         constraintSet.applyTo(constraintLayout);
                         continue;
 
@@ -1119,10 +1127,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(),
                                 ConstraintSet.BASELINE,
@@ -1161,10 +1165,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.START, targetedId, ConstraintSet.END);
                         constraintSet.applyTo(constraintLayout);
@@ -1200,10 +1200,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.START, targetedId, ConstraintSet.START);
                         constraintSet.applyTo(constraintLayout);
@@ -1239,10 +1235,6 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.END, targetedId, ConstraintSet.START);
                         constraintSet.applyTo(constraintLayout);
@@ -1278,12 +1270,30 @@ public class AttributeSetter {
                         }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
-                        constraintSet.constrainDefaultHeight(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
-                        constraintSet.constrainDefaultWidth(
-                                view.getId(), ConstraintSet.WRAP_CONTENT);
                         constraintSet.connect(
                                 view.getId(), ConstraintSet.END, targetedId, ConstraintSet.END);
+                        constraintSet.applyTo(constraintLayout);
+                        continue;
+
+                    case "layout_marginBaseline":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_goneMarginBaseline=\""
+                                                + value
+                                                + "\"",
+                                        "Because it''s parent is not a ConstraintLayout.");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.setMargin(
+                                view.getId(),
+                                ConstraintSet.BASELINE,
+                                (int) ResourcesValuesFixer.getDimen(C, value));
                         constraintSet.applyTo(constraintLayout);
                         continue;
 
@@ -1298,21 +1308,6 @@ public class AttributeSetter {
                                                 + value
                                                 + "\"",
                                         "Because it''s parent is not a ConstraintLayout.");
-                            continue;
-                        }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginStart=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
                             continue;
                         }
                         constraintSet = new ConstraintSet();
@@ -1337,21 +1332,6 @@ public class AttributeSetter {
                                         "Because it''s parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginEnd=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
                         constraintSet.setGoneMargin(
@@ -1372,21 +1352,6 @@ public class AttributeSetter {
                                                 + value
                                                 + "\"",
                                         "Because it''s parent is not a ConstraintLayout.");
-                            continue;
-                        }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginLeft=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
                             continue;
                         }
                         constraintSet = new ConstraintSet();
@@ -1411,21 +1376,6 @@ public class AttributeSetter {
                                         "Because it''s parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginTop=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
                         constraintSet.setGoneMargin(
@@ -1446,21 +1396,6 @@ public class AttributeSetter {
                                                 + value
                                                 + "\"",
                                         "Because it''s parent is not a ConstraintLayout.");
-                            continue;
-                        }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginRight=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
                             continue;
                         }
                         constraintSet = new ConstraintSet();
@@ -1485,21 +1420,6 @@ public class AttributeSetter {
                                         "Because it''s parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginBottom=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
                         constraintSet = new ConstraintSet();
                         constraintSet.clone(constraintLayout);
                         constraintSet.setGoneMargin(
@@ -1520,21 +1440,6 @@ public class AttributeSetter {
                                                 + value
                                                 + "\"",
                                         "Because it''s parent is not a ConstraintLayout.");
-                            continue;
-                        }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_goneMarginBaseline=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
                             continue;
                         }
                         constraintSet = new ConstraintSet();
@@ -1598,8 +1503,8 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
+                        int id = getIdValueAsIntFromListRef(value);
+                        if (id == -1) {
                             if (debug != null)
                                 debug.w(
                                         TAG,
@@ -1609,24 +1514,7 @@ public class AttributeSetter {
                                                 + ") in the method app:layout_constraintCircle=\""
                                                 + value
                                                 + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
-                        int id = getIdValueAsIntFromListRef(value);
-                        if (id == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintCircleRadius=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
+                                                + " does not exist.");
                             continue;
                         }
                         String valRadius =
@@ -1636,7 +1524,7 @@ public class AttributeSetter {
                         layoutParams.circleConstraint = id;
                         layoutParams.circleRadius =
                                 (int) ResourcesValuesFixer.getDimen(C, valRadius);
-                        layoutParams.circleAngle = ResourcesValuesFixer.getDimen(C, valAngle);
+                        layoutParams.circleAngle = Float.parseFloat(valAngle);
                         view.setLayoutParams(layoutParams);
                         continue;
 
@@ -1653,22 +1541,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constrainedWidth=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.constrainedWidth = Boolean.parseBoolean(value);
                         view.setLayoutParams(layoutParams);
@@ -1687,22 +1559,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constrainedHeight=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.constrainedHeight = Boolean.parseBoolean(value);
                         view.setLayoutParams(layoutParams);
@@ -1721,22 +1577,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintWidth_min=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.matchConstraintMinWidth =
                                 (int) ResourcesValuesFixer.getDimen(C, value);
@@ -1756,22 +1596,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintHeight_min=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.matchConstraintMinHeight =
                                 (int) ResourcesValuesFixer.getDimen(C, value);
@@ -1791,22 +1615,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintWidth_max=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.matchConstraintMaxWidth =
                                 (int) ResourcesValuesFixer.getDimen(C, value);
@@ -1826,22 +1634,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintHeight_max=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.matchConstraintMaxHeight =
                                 (int) ResourcesValuesFixer.getDimen(C, value);
@@ -1861,22 +1653,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintWidth_percent=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.matchConstraintPercentWidth = Float.parseFloat(value);
                         view.setLayoutParams(layoutParams);
@@ -1895,22 +1671,6 @@ public class AttributeSetter {
                                         "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
-
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintHeight_percent=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
-
                         layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
                         layoutParams.matchConstraintPercentHeight = Float.parseFloat(value);
                         view.setLayoutParams(layoutParams);
@@ -1930,25 +1690,16 @@ public class AttributeSetter {
                             continue;
                         }
 
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintWidth_default=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
+                        int val = -1;
+                        if (value.equals("wrap")) val = ConstraintSet.WRAP_CONTENT;
+                        else if (value.equals("percent")) val = ConstraintSet.MATCH_CONSTRAINT;
+                        else if (value.equals("none")) val = ConstraintSet.WRAP_CONTENT;
+                        else continue;
 
-                        layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-                        layoutParams.matchConstraintDefaultWidth =
-                                (int) ResourcesValuesFixer.getDimen(C, value);
-                        view.setLayoutParams(layoutParams);
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.constrainDefaultWidth(view.getId(), val);
+                        constraintSet.applyTo(constraintLayout);
                         continue;
 
                     case "layout_constraintHeight_default":
@@ -1965,25 +1716,16 @@ public class AttributeSetter {
                             continue;
                         }
 
-                        if (targetedId == -1) {
-                            if (debug != null)
-                                debug.w(
-                                        TAG,
-                                        getElementNameAndRow(),
-                                        "the targeted id("
-                                                + value
-                                                + ") in the method app:layout_constraintHeight_default=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
-                            continue;
-                        }
+                        val = -1;
+                        if (value.equals("wrap")) val = ConstraintSet.WRAP_CONTENT;
+                        else if (value.equals("percent")) val = ConstraintSet.MATCH_CONSTRAINT;
+                        else if (value.equals("none")) val = ConstraintSet.WRAP_CONTENT;
+                        else continue;
 
-                        layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-                        layoutParams.matchConstraintDefaultHeight =
-                                (int) ResourcesValuesFixer.getDimen(C, value);
-                        view.setLayoutParams(layoutParams);
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.constrainDefaultHeight(view.getId(), val);
+                        constraintSet.applyTo(constraintLayout);
                         continue;
 
                     case "layout_constraintDimensionRatio":
@@ -2000,24 +1742,180 @@ public class AttributeSetter {
                             continue;
                         }
 
-                        if (targetedId == -1) {
+                        layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+                        layoutParams.dimensionRatio = value;
+                        view.setLayoutParams(layoutParams);
+                        continue;
+
+                    case "layout_constraintHorizontal_chainStyle":
+                        if (constraintLayout == null) {
                             if (debug != null)
                                 debug.w(
                                         TAG,
                                         getElementNameAndRow(),
-                                        "the targeted id("
+                                        "Cannot apply this attribute "
+                                                + "app:layout_constraintHorizontal_chainStyle=\""
                                                 + value
-                                                + ") in the method app:layout_constraintDimensionRatio=\""
-                                                + value
-                                                + "\""
-                                                + " does not exist.",
-                                        "if you think otherwise, then, check if the view with this id is loaded(declared) before this View");
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
                             continue;
                         }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        val = -1;
+                        if (value.equals("spread")) val = ConstraintSet.CHAIN_SPREAD;
+                        else if (value.equals("packed")) val = ConstraintSet.CHAIN_PACKED;
+                        else if (value.equals("spread_inside"))
+                            val = ConstraintSet.CHAIN_SPREAD_INSIDE;
+                        else continue;
+                        if (!(view instanceof ViewGroup)) continue;
+                        var treeE = listener.onRefViewElementNeeded().getTreeElement(element);
+                        if (treeE == null) continue;
+                        for (var eChild : treeE.getChildren()) {
+                            String startOrLeft =
+                                    eChild.getAttribute("app:layout_constraintStart_toStartOf")
+                                            .trim();
+                            if (startOrLeft.isEmpty())
+                                startOrLeft =
+                                        eChild.getAttribute("app:layout_constraintLeft_toLeftOf")
+                                                .trim();
+                            if (!startOrLeft.equals("parent")) continue;
+                            final var tmpView = listener.onRefViewElementNeeded().getView(eChild);
+                            if (tmpView == null) continue;
+                            constraintSet.setHorizontalChainStyle(tmpView.getId(), val);
+                        }
+                        continue;
 
-                        layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-                        layoutParams.dimensionRatio = value;
-                        view.setLayoutParams(layoutParams);
+                    case "layout_constraintVertical_chainStyle":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_constraintVertical_chainStyle=\""
+                                                + value
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        val = -1;
+                        if (value.equals("spread")) val = ConstraintSet.CHAIN_SPREAD;
+                        else if (value.equals("packed")) val = ConstraintSet.CHAIN_PACKED;
+                        else if (value.equals("spread_inside"))
+                            val = ConstraintSet.CHAIN_SPREAD_INSIDE;
+                        else continue;
+                        if (!(view instanceof ViewGroup)) continue;
+                        treeE = listener.onRefViewElementNeeded().getTreeElement(element);
+                        if (treeE == null) continue;
+                        for (var eChild : treeE.getChildren()) {
+                            String top =
+                                    eChild.getAttribute("app:layout_constraintTop_toTopOf").trim();
+                            if (!top.equals("parent")) continue;
+                            final var tmpView = listener.onRefViewElementNeeded().getView(eChild);
+                            if (tmpView == null) continue;
+                            constraintSet.setHorizontalChainStyle(tmpView.getId(), val);
+                        }
+                        continue;
+
+                    case "layout_constraintHorizontal_weight":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_constraintHorizontal_weight=\""
+                                                + value
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.setHorizontalWeight(view.getId(), Float.parseFloat(value));
+                        constraintSet.applyTo(constraintLayout);
+                        continue;
+
+                    case "layout_constraintVertical_weight":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_constraintVertical_weight=\""
+                                                + value
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.setVerticalWeight(view.getId(), Float.parseFloat(value));
+                        constraintSet.applyTo(constraintLayout);
+                        continue;
+
+                    case "layout_restrictedWidth":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_restrictedWidth=\""
+                                                + value
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.constrainWidth(
+                                view.getId(), ConstraintSet.MATCH_CONSTRAINT_WRAP);
+                        constraintSet.connect(
+                                view.getId(),
+                                ConstraintSet.LEFT,
+                                constraintLayout.getId(),
+                                ConstraintSet.LEFT);
+                        constraintSet.connect(
+                                view.getId(),
+                                ConstraintSet.RIGHT,
+                                constraintLayout.getId(),
+                                ConstraintSet.RIGHT);
+                        constraintSet.applyTo(constraintLayout);
+                        continue;
+
+                    case "layout_restrictedHeight":
+                        if (constraintLayout == null) {
+                            if (debug != null)
+                                debug.w(
+                                        TAG,
+                                        getElementNameAndRow(),
+                                        "Cannot apply this attribute "
+                                                + "app:layout_restrictedHeight=\""
+                                                + value
+                                                + "\"",
+                                        "Because it's parent is not a ConstraintLayout.");
+                            continue;
+                        }
+                        constraintSet = new ConstraintSet();
+                        constraintSet.clone(constraintLayout);
+                        constraintSet.constrainHeight(
+                                view.getId(), ConstraintSet.MATCH_CONSTRAINT_WRAP);
+                        constraintSet.connect(
+                                view.getId(),
+                                ConstraintSet.LEFT,
+                                constraintLayout.getId(),
+                                ConstraintSet.LEFT);
+                        constraintSet.connect(
+                                view.getId(),
+                                ConstraintSet.RIGHT,
+                                constraintLayout.getId(),
+                                ConstraintSet.RIGHT);
+                        constraintSet.applyTo(constraintLayout);
                         continue;
                         // End of attributes related to ConstraintLayout
 
@@ -2201,7 +2099,7 @@ public class AttributeSetter {
                         continue;
 
                     case "fabAlignmentMode":
-                        int val = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
+                        val = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER;
                         if (value.equals("end")) val = BottomAppBar.FAB_ALIGNMENT_MODE_END;
                         CodeUtil.invoke(view, "setFabAlignmentMode", new Class[] {int.class}, val);
                         continue;
@@ -3324,14 +3222,14 @@ public class AttributeSetter {
                                 view,
                                 "setPivotX",
                                 new Class[] {float.class},
-                                Float.parseFloat(value));
+                                ResourcesValuesFixer.getDrawable(C, value));
                         continue;
                     case "transformPivotY":
                         CodeUtil.invoke(
                                 view,
                                 "setPivotY",
                                 new Class[] {float.class},
-                                Float.parseFloat(value));
+                                ResourcesValuesFixer.getDrawable(C, value));
                         continue;
                     case "verticalScrollbarPosition":
                         CodeUtil.invoke(
