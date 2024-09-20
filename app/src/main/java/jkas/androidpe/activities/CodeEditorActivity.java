@@ -22,6 +22,7 @@ import jkas.androidpe.mainEditorView.FilesManager;
 import jkas.androidpe.databinding.ActivityCodeEditorBinding;
 import jkas.androidpe.explorer.CodeEditorExplorer;
 import jkas.androidpe.projectUtils.current.ProjectsModules;
+import jkas.androidpe.resourcesUtils.dataInitializer.DataResInitializer;
 import jkas.androidpe.resourcesUtils.dialog.DialogBottomSheetAttrModifier;
 import jkas.androidpe.resourcesUtils.dialog.DialogBuilder;
 import jkas.androidpe.resourcesUtils.dialog.DialogProgressIndeterminate;
@@ -119,6 +120,8 @@ public class CodeEditorActivity extends AppCompatActivity {
                 .postDelayed(
                         () -> {
                             ResReferences.init(this);
+                            LoggerRes.initFromZero();
+                            LoggerRes.addLogListener(() -> DataResInitializer.init(C));
                             loadData();
                         },
                         43);
@@ -324,15 +327,6 @@ public class CodeEditorActivity extends AppCompatActivity {
                                         setFullScreen
                                                 ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED
                                                 : DrawerLayout.LOCK_MODE_UNDEFINED);
-                    }
-                });
-
-        LoggerRes.initFromZero();
-        LoggerRes.addLogListener(
-                new LoggerRes.LogListener() {
-                    @Override
-                    public void reloadResRef() {
-                        ResReferences.init(C);
                     }
                 });
     }

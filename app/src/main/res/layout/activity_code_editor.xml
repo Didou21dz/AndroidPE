@@ -44,7 +44,6 @@
                     android:paddingRight="8dp"
                     android:textSize="8dp"
                     android:paddingLeft="8dp"
-                    android:textColor="@color/warning"
                     android:id="@+id/tvInfo"
                     android:text="..." />
 

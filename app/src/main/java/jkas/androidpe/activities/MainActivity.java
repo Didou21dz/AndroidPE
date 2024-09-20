@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatActivity C = this;
     private ActivityMainBinding binding;
     private SearchingProjects SP;
-
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.RequestPermission(),
@@ -61,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({GRANTED, DENIED, BLOCKED_OR_NEVER_ASKED})
     public @interface PermissionStatus {}
+
+    @Target({ElementType.FIELD})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface attr {
+        String name();
+    }
 
     @PermissionStatus
     public static int getPermissionStatus(
@@ -81,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        loadProjectView();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         Logger.initFromZero();
@@ -97,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SplashScreen ss = SplashScreen.installSplashScreen(this);
+        SplashScreen.installSplashScreen(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -105,13 +116,6 @@ public class MainActivity extends AppCompatActivity {
         initTheme();
         loadListeners();
         allOnClick();
-        loadProjectView();
-    }
-
-    @Target({ElementType.FIELD})
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface attr {
-        String name();
     }
 
     private void loadProjectView() {

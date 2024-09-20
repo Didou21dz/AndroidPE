@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import jkas.androidpe.project.Project;
 import jkas.androidpe.resourcesUtils.utils.ProjectsPathUtils;
 import jkas.androidpe.resourcesUtils.utils.ResCodeUtils;
+import jkas.codeUtil.CodeUtil;
 import jkas.codeUtil.Files;
 import jkas.codeUtil.XmlManager;
 import org.w3c.dom.Element;
@@ -42,6 +43,7 @@ public class SearchingProjects {
     }
 
     private void loadProject(final int position) {
+        if (position == listPathToAllProjects.size()) return;
         String dir = listPathToAllProjects.get(position).second;
         String buildGradle = dir + "/build.gradle";
         String settingsGradle = dir + "/settings.gradle";
@@ -77,7 +79,7 @@ public class SearchingProjects {
             }
         }
 
-        if ((position + 1) >= listPathToAllProjects.size()) listener.onFinish();
+        if ((position + 1) == listPathToAllProjects.size()) listener.onFinish();
         else new Handler(Looper.getMainLooper()).postDelayed(() -> loadProject(position + 1), 6);
     }
 

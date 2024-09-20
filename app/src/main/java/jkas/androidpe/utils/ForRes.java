@@ -11,8 +11,9 @@ import jkas.androidpe.resourcesUtils.requests.ProjectDataRequested;
  * @author JKas
  */
 public class ForRes {
-
     public static void initEventsResquest() {
+        
+        
         ProjectDataRequested.getInstance()
                 .setOnDataNeeded(
                         new ProjectDataRequested.OnDataNeeded() {

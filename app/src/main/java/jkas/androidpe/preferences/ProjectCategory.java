@@ -66,8 +66,8 @@ public class ProjectCategory {
                                 }
 
                                 @Override
-                                public void onValueConfirmed() {
-                                    RKBDataAppSettings.setAppPnp(text);
+                                public void onValueConfirmed(boolean match) {
+                                    if (match) RKBDataAppSettings.setAppPnp(text);
                                 }
                             });
                     dialog.show();
