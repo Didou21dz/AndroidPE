@@ -34,8 +34,3 @@ include ':rkb:codeEV:mainEditorView'
 include ':rkb:codeEV:menuItemDesigner'
 include ':rkb:codeEV:layoutUiDesigner'
 include ':rkb:codeEV:resValuesModifier'
-
-//include ':os-m:treeView'
-//include ':os-m:editor'
-//include ':os-m:editor-textmate'
-//include ':os-m:terminal'
